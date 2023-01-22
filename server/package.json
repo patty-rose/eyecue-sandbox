@@ -1,0 +1,20 @@
+{
+  "name": "eyecue-sandbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.9.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "node": "^19.4.0"
+  },
+  "devDependencies": {
+    "prisma": "^4.9.0"
+  }
+}

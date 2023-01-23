@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from './pages/Home';
-import User from './pages/User';
+import Form from './pages/Form';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<Home />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/form" element={<Form />} />
       </Routes>
     </BrowserRouter>
   );

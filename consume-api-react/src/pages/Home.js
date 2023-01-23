@@ -3,18 +3,15 @@ import React, { useState, useEffect }  from 'react';
 const Home = () => {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({});
+
   useEffect(() => {
       fetch("http://localhost:3001/users")
-          .then((res) => {
-            res.json()
-            console.log(res)
-          })
+          .then(res => res.json())
           .then(
               (data) => {
                   setIsLoaded(true);
                   setUsers(data);
-                  console.log(users);
               },
               (error) => {
                   setIsLoaded(true);
@@ -29,7 +26,7 @@ if (error) {
   } else {
       return (
           <ul>
-              {users.map(user => (
+              {users?.map(user => (
               <li key={user.id}>
                   {user.name} 
               </li>

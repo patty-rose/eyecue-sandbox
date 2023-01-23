@@ -2,11 +2,21 @@ import { PrismaClient } from '@prisma/client'
 import express from 'express'
 
 const prisma = new PrismaClient()
-const cors = require('cors');
+import cors from 'cors';
 const app = express()
 
+//for socket.io
+import http from 'http'
+const server = http.createServer(app);
 
-app.use(cors())
+import { Socket } from 'socket.io';
+const io = require('socket.io')(server, {cors: {origin: "*"}});
+
+// app.use(cors({
+//   origin: 'http://localhost:3000',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type']
+// }));
 
 app.use(express.json())
 
@@ -78,6 +88,20 @@ app.delete(`/post/:id`, async (req, res) => {
   res.json(post)
 })
 
-app.listen(3001, () =>
+io.on('connection', (socket: Socket) => {
+  console.log('a user connected')
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
+  socket.on('new-user', (data: any) => {
+    io.emit('new-user', data);
+  })
+})
+
+// app.listen(3001, () =>
+//   console.log('REST API server ready at: http://localhost:3001'),
+// )
+
+server.listen(3001, () =>
   console.log('REST API server ready at: http://localhost:3001'),
 )

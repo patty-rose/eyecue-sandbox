@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-const Form = () => {
+
+const Form = ({ socket }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Form = () => {
         },
         body: JSON.stringify(userData)
       });
+      socket.emit('new-user', userData);
       navigate('/home');
     } catch (error) {
       console.error(error);

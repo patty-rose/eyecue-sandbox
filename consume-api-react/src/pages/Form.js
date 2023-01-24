@@ -8,7 +8,6 @@ const Form = ({ socket }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(name)
     const userData = { name: `${name}`, email: `${email}`};
     try {
       await fetch("http://localhost:3001/user", {

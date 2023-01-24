@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import express from 'express'
 
 const prisma = new PrismaClient()
-import cors from 'cors';
+import cors from 'cors';//typescript uses this import statement, js uses const cors = require('cors');
 const app = express()
 
 //for socket.io
@@ -12,11 +12,11 @@ const server = http.createServer(app);
 import { Socket } from 'socket.io';
 const io = require('socket.io')(server, {cors: {origin: "*"}});
 
-// app.use(cors({
-//   origin: 'http://localhost:3000',
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   allowedHeaders: ['Content-Type']
-// }));
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
 
 app.use(express.json())
 
@@ -57,13 +57,13 @@ app.post(`/user`, async (req, res) => {
 
 //POST post: creates a new post as a draft
 app.post(`/post`, async (req, res) => {
-  const { title, content, authorEmail } = req.body
+  const { title, content, authorId } = req.body
   const result = await prisma.post.create({
     data: {
       title,
       content,
       published: false,
-      author: { connect: { email: authorEmail } },
+      author: { connect: { id: authorId } },
     },
   })//first need to extract them manually to pass them to the Prisma Client query. Because the structure of the JSON in the request body does not match the structure that’s expected by Prisma Client, you need to create the expected structure manually.
   res.json(result)
@@ -93,8 +93,14 @@ io.on('connection', (socket: Socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected')
   })
-  socket.on('new-user', (data: any) => {
-    io.emit('new-user', data);
+  socket.on('new-user', async (data: any) => {
+    const newUser = await prisma.user.create({
+      data: { 
+        name: (data.name as string),
+        email: (data.email as string)
+      },
+    });
+    io.emit('new-user', newUser);
   })
 })
 
